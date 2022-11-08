@@ -5,7 +5,18 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pigs</title>
-  <script type="text/javascript" src="/mods/modify.js" defer></script>
+  <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.47/system.js"
+      integrity="sha512-mkBpeD76fJnxFHGZstCL0mPCW6E3RFtUzfp5Ye8oQg2rxQNHy4BgHsbmvSizsq3fgF4PGozPI1BzGCB/h1Yq5g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      System.defaultJSExtensions = true;
+      System.import("/mods/modify");
+    //   System.import("more_info");
+
+    </script>
   <link rel="stylesheet" href="styles/pigs.css">
 </head>
 
@@ -35,19 +46,21 @@
       <label for="name">Name</label>
       <input type="text" id ="name"><br>
       <label for="height">Height</label>
-      <input type="text" id ="height"><br>
+      <input type="number" id ="height"><br>
       <label for="weight">Weight</label>
-      <input type="text" id ="weight"><br>
+      <input type="number" id ="weight"><br>
+      <label for="breed">Breed</label>
+      <input type="text" id ="breed"><br>
       <label for="personality">Personality</label>
       <input type="text" id ="personality"><br>
       <label for="category">Category</label>
       <select name="category" id="category">
         <option value="" disabled selected>Choose One</option>
-        <option value="grey">Grey</option>
-        <option value="chestnut">Chestnut</option>
-        <option value="white">White</option>
-        <option value="black">Black</option>
-      </select>
+        <option value="grey">grey</option>
+        <option value="chestnut">chestnut</option>
+        <option value="white">white</option>
+        <option value="black">black</option>
+      </select><br>
     </form>
     <button id="add-submit">Submit</button>
   </div>
