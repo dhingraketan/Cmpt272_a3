@@ -13,7 +13,7 @@
     ></script>
     <script>
       System.defaultJSExtensions = true;
-      System.import("/mods/modify");
+      System.import("/mods/index");
     //   System.import("more_info");
 
     </script>
@@ -22,7 +22,7 @@
 
 <body>
   <div>
-    <table class="content-table">
+    <table class="content-table" id = "main-table">
       <thead>
         <tr>
           <th>Name</th>
@@ -31,14 +31,13 @@
           <th></th>
         </tr>
       </thead>
-
-      <tbody>
+      <tbody id="main-table-body">
       </tbody>
 
     </table>
     <button id="add-btn">Add</button>
   </div>
-  <table class="info-table">
+  <table id="info-table">
   </table>
 
   <div id="add-form">
@@ -52,7 +51,13 @@
       <label for="breed">Breed</label>
       <input type="text" id ="breed"><br>
       <label for="personality">Personality</label>
-      <input type="text" id ="personality"><br>
+      <select name="personality" id="personality">
+        <option value="" disabled selected>Choose One</option>
+        <option value="bad">bad</option>
+        <option value="fair">fair</option>
+        <option value="good">good</option>
+        <option value="excellent">excellent</option>
+      </select><br>
       <label for="category">Category</label>
       <select name="category" id="category">
         <option value="" disabled selected>Choose One</option>
