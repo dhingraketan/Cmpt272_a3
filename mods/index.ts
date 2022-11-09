@@ -65,12 +65,13 @@ category.addEventListener('change', showDynamicOpts, false);
 
 function addPig(){
   var pigName = (document.getElementById('name') as HTMLInputElement).value;
-  var height = (document.getElementById('height') as HTMLInputElement).value;
-  var weight = (document.getElementById('weight') as HTMLInputElement).value;
+  var height = (document.getElementById('height') as HTMLInputElement).valueAsNumber;
+  var weight = (document.getElementById('weight') as HTMLInputElement).valueAsNumber;
   var breed = (document.getElementById('breed') as HTMLInputElement).value;
   var personality = (document.getElementById('personality') as HTMLInputElement).value;
   var pers: Personality = Personality.bad;
   var p:Pig = new Pig(pigName, Category.grey, breed, +height, +weight, pers);
+
   if(personality == 'bad'){
     pers = Personality.bad;
   } else if(personality == 'fair'){
@@ -81,17 +82,33 @@ function addPig(){
     pers = Personality.excellent;
   }
 
-  if(category.value == 'grey'){
-    var swimAb = (document.getElementById('swimming-ability') as HTMLInputElement).value;
+  pigName = valdateInputforStrings(pigName, "name");
+  breed = valdateInputforStrings(breed, "breed");
+  height = validateInputforInts(height, "height", 100, 1);
+  weight = validateInputforInts(weight, "weight", 1000, 1);
+  var catVal = category.value;
+
+  var personalityOptions: string[] = ["bad", "fair", "good", "excellent"];
+  var categoryOptions: string[] = ["grey", "chestnut", "white", "black"];
+
+  personality = validateInputforDropDowns(personality, personalityOptions, "Personality");
+  catVal = validateInputforDropDowns(catVal, categoryOptions, "category");
+
+  if(catVal == 'grey'){
+    var swimAb = (document.getElementById('swimming-ability') as HTMLInputElement).valueAsNumber;
+    swimAb = validateInputforInts(swimAb, "Swim Ability", 100, 1);
     p = new GreyPig(pigName, breed, +height, +weight, pers, +swimAb);
-  } else if(category.value == 'chestnut'){
+  } else if(catVal == 'chestnut'){
     var lang = (document.getElementById('language') as HTMLInputElement).value;
+    lang = valdateInputforStrings(lang, "language");
     p = new ChestnutPig(pigName, breed, +height, +weight, pers, lang);
-  } else if(category.value == 'white'){
-    var runAb = (document.getElementById('running-ability') as HTMLInputElement).value;
+  } else if(catVal == 'white'){
+    var runAb = (document.getElementById('running-ability') as HTMLInputElement).valueAsNumber;
+    runAb = validateInputforInts(runAb, "Running Ability", 100, 1);
     p = new WhitePig(pigName, breed, +height, +weight, pers, +runAb);
-  } else if( category.value == 'black'){
-    var strenght = (document.getElementById('strenght') as HTMLInputElement).value;
+  } else if( catVal == 'black'){
+    var strenght = (document.getElementById('strenght') as HTMLInputElement).valueAsNumber;
+    strenght = validateInputforInts(strenght, "Strenght", 10, 1);
     p = new BlackPig(pigName, breed, +height, +weight, pers, +strenght);
   }
 
@@ -99,16 +116,16 @@ function addPig(){
   localStorage.setItem(pigName, serPig);
   const addForm = document.getElementById('add-form')! as HTMLDivElement;
 
-
   tBody.insertAdjacentHTML('beforeend', 
-  `
-    <tr>
-      <td>${pigName}</td>
-      <td>${category.value}</td>
-      <td><button class="more-info">More Info</button></td>
-      <td><button class="delete-btn">Delete</button></td>
-    </tr>
-  `);
+    `
+      <tr>
+        <td>${pigName}</td>
+        <td>${category.value}</td>
+        <td><button class="more-info">More Info</button></td>
+        <td><button class="delete-btn">Delete</button></td>
+      </tr>
+    `
+  );
 
   (document.getElementById('name') as HTMLInputElement).value = '';
   (document.getElementById('height') as HTMLInputElement).value = '';
@@ -116,7 +133,7 @@ function addPig(){
   (document.getElementById('breed') as HTMLInputElement).value = '';
   (document.getElementById('personality') as HTMLInputElement).value = '';
   category.value = '';
-  hideDynamicOpts;
+  hideDynamicOpts();
   addForm.style.display = 'none';
 }
 
@@ -241,7 +258,12 @@ function moreInfo(e: Event){
     var infoTable = document.getElementById('info-table')! as HTMLTableElement;
     infoTable.innerHTML = 
     `
-      <div>More Info:</<div>
+      <thead>
+        <tr>
+          <th>More Info</th>
+          <th></th>
+        </tr>
+      </thead>
       <tbody>
         <tr>
           <td>Name</td>
@@ -252,11 +274,11 @@ function moreInfo(e: Event){
           <td>${p.breed}</td>
         </tr>
         <tr>
-          <td>Height</td>
+          <td>Height(inches)</td>
           <td>${p.height}</td>
         </tr>
         <tr>
-          <td>Weight</td>
+          <td>Weight(lbs)</td>
           <td>${p.weight}</td>
         </tr>
         <tr>
@@ -269,5 +291,35 @@ function moreInfo(e: Event){
         </tr>
     `;
   }
+}
 
+function valdateInputforStrings(value: string, typ: string){
+  if(value.length == 0){
+    while(value.length == 0){
+      var namePrompt = window.prompt("Enter a Valid input for " + typ, "");
+      if(namePrompt != null && namePrompt.trim() != ""){
+        value = namePrompt;
+      }
+    }
+  }
+  return value;
+}
+
+function validateInputforInts(value: number, typ: string, upperBound: number, lowerBound: number){
+  if(value < lowerBound || value > upperBound || !value){
+    while(+value < lowerBound || +value > upperBound || !value){
+      value = +(window.prompt("please a valid input between " + lowerBound + " and " + upperBound + " for " + typ, ""))!;
+    }
+  }
+
+  return value;
+}
+
+function validateInputforDropDowns(value: string, tar: string[], typ: string){
+  while(tar.indexOf(value) == -1){
+    var prompt:string = (window.prompt("Enter a Valid input for " + typ + " from " + tar.toString(), "")!);
+    value = (((prompt).toString())!).toLowerCase();
+  }
+
+  return value;
 }
